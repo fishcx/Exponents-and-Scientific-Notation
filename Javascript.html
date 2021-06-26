@@ -1,0 +1,680 @@
+<script>
+	$(document).ready(function() {
+    
+    $('.changeItem').change(function(){
+        $('#generate').click();
+    });
+
+    $(document).keypress(function (e) {
+        var key = e.which;
+         if(key == 13)  // the enter key code
+         {
+            $('#generate').click();
+             return false;  
+          }
+    });
+    
+    $('#video-button').hide();
+    
+    var testing = false;
+    $('#generate').click(function(){
+        
+        var type;
+        // handles the formatting for selecting any type
+        if($("#type").val()=="any"){type = random(1,7);}
+        else{type = parseInt($("#type").val())}
+
+        if(!testing){$("#answer").hide(); $("#show-answer").val("Show Answer");}
+        generate(type);       
+     });
+
+
+    $("#show-answer").click(function(){
+       if($("#answer").is(":hidden") ){
+          $("#answer").show();
+          $("#show-answer").val("Hide Answer");
+       } else{
+         $("#answer").hide();
+         $("#show-answer").val("Show Answer");
+        }
+    });
+
+	});
+	function generate(type){
+       
+       var videoLinks = ["https://www.youtube.com/watch?v=k-wTtHsnKq0",
+                         "https://www.youtube.com/watch?v=Li6pv0gs1gM",
+                         "https://www.youtube.com/watch?v=ZvULOKQJFfE",
+                         "https://www.youtube.com/watch?v=Nk3w7gfc2Q8",
+                         "https://www.youtube.com/watch?v=aVSRRroRAK8",
+                         "https://www.youtube.com/watch?v=4Ud_jB1b9JE",
+                         "https://www.youtube.com/watch?v=GgF40PwoSWE"];
+       
+       if(videoLinks[type-1].length != 0){ 
+         $("#videoLink"). attr("href", videoLinks[type-1]);
+         $('#video-button').show();
+       }
+       else{
+         $('#video-button').hide();
+       }     
+       
+       var problem = "";
+       var answer = "";
+       var a,b,c,d,e,f,g,h,i;
+       var tot = 0;
+       $("#generated").html("");
+       $("#answer").html("");
+       
+       // determine the bases
+       a = generateBase(false);
+       do{b = generateBase(false);} while(b == a);
+       do{c = generateBase(false);} while(b == c || c == a);
+       
+       // create the exponents
+       d = non_zero_random(2,7); 
+       e = non_zero_random(-7,7); 
+       f = non_zero_random(2,7);
+       g = non_zero_random(-7,7);
+       h = non_zero_random(2,7);
+       i = non_zero_random(-7,7);
+       
+       var var1 = pickVar();
+       var var2,var3;
+       do{var2 = pickVar(); } while(var1 == var2);
+       do{var3 = pickVar(); } while(var1 == var3 || var2 == var3);
+       
+       switch(type) {
+           // Multiplying
+           case 1: 
+           switch(random(0,6)){
+              
+              case 6:
+              problem = "\\("+a+"^{"+d+"}"+b+"^{"+f+"} \\cdot "+a+"^{"+g+"}"+b+"^{"+i+"}\\)";
+              answer = a+"^{"+(d+g)+"} \\cdot "+b+"^{"+(f+i)+"}";    
+              answer += formatAnswer(1,[a,b],[(d+g),(f+i)]);         
+              break;
+              
+              case 5:
+              a = random(2,6); b = random(2,6);
+              problem = "\\("+a+var1+"^{"+d+"}"+var2+"^{"+e+"} \\cdot "+b+var1+"^{"+g+"}"+var2+"^{"+h+"}\\)";
+              answer = (a*b)+var1+"^{"+(d+g)+"} \\cdot "+var2+"^{"+(e+h)+"}";     
+              answer += formatAnswer((a*b),[var1,var2],[(d+g),(e+h)]);         
+              break;
+   
+              case 4:
+              a = random(2,6); b = random(2,6);
+              problem = "\\("+a+var1+"^{"+d+"}"+var2+"^{"+e+"}"+var3+"^{"+f+"} \\cdot "+b+var1+"^{"+g+"}"+var2+"^{"+h+"}"+var3+"^{"+i+"}\\)";
+              answer = (a*b)+var1+"^{"+(d+g)+"} \\cdot "+var2+"^{"+(e+h)+"} \\cdot "+var3+"^{"+(f+i)+"}";     
+              answer += formatAnswer((a*b),[var1,var2,var3],[(d+g),(e+h),(f+i)]);         
+              break;
+              
+              case 3:
+              problem += a+"^{"+d+"} \\cdot ";
+              tot += d;
+              
+              case 2:
+              problem += a+"^{"+e+"} \\cdot ";
+              tot += e;
+              
+              case 1:
+              problem += a+"^{"+f+"} \\cdot ";
+              tot += f;
+              
+              case 0:
+              problem += a+"^{"+g+"} \\cdot "+a+"^{"+h+"}";              
+              tot += g+h;
+              
+              answer = a+"^{"+tot+"}";
+              answer += formatAnswer(1,[a],[tot]);
+              problem = "\\("+problem+"\\)";
+              
+              break;
+           
+           }
+
+           break;
+           
+           // Dividing
+           case 2:
+           var top = "";
+           var bot = "";
+           var totalTopA = 0;
+           var totalBotA = 0;
+           var totalTopB = 0;
+           var totalBotB = 0;
+           var totA = 0;
+           var totB = 0;
+           var bExists = false;
+           switch(random(0,2)){
+              
+              case 2:
+              a = random(2,6); b = random(2,6); c = a*b;              
+              problem = "\\(\\cfrac{"+c+"x^{"+d+"}y^{"+e+"}z^{"+f+"}}{"+b+"x^{"+g+"}y^{"+h+"}z^{"+i+"}}\\)";
+              answer = a+"x^{"+(d-g)+"}y^{"+(e-h)+"}z^{"+(f-i)+"}";      
+              answer += formatAnswer(a,["x","y","z"],[(d-g),(e-h),(f-i)]);
+              break;
+              
+              case 1:
+              a = random(2,6); b = random(2,6); c = a*b;              
+              problem = "\\(\\cfrac{"+c+"x^{"+d+"}y^{"+e+"}}{"+b+"x^{"+g+"}y^{"+h+"}}\\)";
+              answer = a+"x^{"+(d-g)+"}y^{"+(e-h)+"}";      
+              answer += formatAnswer(a,["x","y"],[(d-g),(e-h)]);
+              break;
+
+              case 0:
+              bExists = true;
+              top += a+"^{"+e+"} \\cdot ";
+              bot += a+"^{"+f+"} \\cdot ";
+              top += b+"^{"+i+"}";
+              bot += b+"^{"+g+"}";
+              totalTopA += e;
+              totalBotA += f;
+              totalTopB += i;
+              totalBotB += g;
+              
+              totA = totalTopA-totalBotA;
+              totB = totalTopB-totalBotB;
+              
+              problem = "\\(\\cfrac{"+top+"}{"+bot+"}\\)";
+              
+              answer = a+"^{"+totA+"}";
+              var bases = [a];
+              var exponents = [totA];
+              
+              if(bExists){ answer += "\\cdot "+b+"^{"+totB+"}"; bases.push(b); exponents.push(totB);}
+              answer += formatAnswer(1,bases,exponents);
+              
+              break;
+           
+           }
+           break;
+		  
+           // Power to a Power
+           case 3: 
+           var neg = false;
+           var ans1 = "";
+           var ans2 = "";
+           var bases = [];
+           var exponents = [];
+
+           switch(random(0,5)){
+              
+              case 5:
+              a = random(2,5);
+              problem = "\\(("+a+var1+"^{"+d+"}"+var2+"^{"+e+"}"+var3+"^{"+f+"})^{"+h+"}\\)";
+              answer = a+"^{"+h+"}"+var1+"^{"+(d*h)+"}"+var2+"^{"+(e*h)+"}"+var3+"^{"+(f*h)+"}";
+              answer += formatAnswer(1,[a,var1,var2,var3],[h,(d*h),(e*h),(f*h)]);
+              break;
+              
+              case 4:
+              a = random(2,5);
+              problem = "\\(("+a+var1+"^{"+d+"}"+var2+"^{"+e+"})^{"+h+"}\\)";
+              answer = a+"^{"+h+"}"+var1+"^{"+(d*h)+"}"+var2+"^{"+(e*h)+"}";
+              answer += formatAnswer(1,[a,var1,var2],[h,(d*h),(e*h)]);
+              break;
+              
+              case 3:
+              a = random(2,5);
+              problem = "\\(("+a+var1+"^{"+d+"})^{"+h+"}\\)";
+              answer = a+"^{"+h+"}"+var1+"^{"+(d*h)+"}";
+              answer += formatAnswer(1,[a,var1],[h,(d*h)]);
+              break;
+              
+              case 2:
+              problem += a+"^{"+e+"}";
+              answer += a+"^{"+(e*h)+"}";
+              bases.push(a); exponents.push(e*h);
+              
+              case 1:
+              problem += b+"^{"+f+"}";
+              answer += b+"^{"+(f*h)+"}";
+              bases.push(b); exponents.push(f*h);
+              
+              case 0:
+              problem += c+"^{"+g+"}";              
+              answer += c+"^{"+(g*h)+"}";
+              bases.push(c); exponents.push(g*h);
+
+              answer += formatAnswer(1,bases,exponents);
+              problem = "\\(("+problem+")^{"+h+"}\\)";
+              
+              break;
+           
+           }
+           break;
+		   
+           // Multi-Step
+           case 4:
+           var top = "";
+           var bot = "";
+           var tott1 = 0;
+           var totb1 = 0;
+           var tot1 = 0;
+           var bExists = false;
+           var cExists = false;
+           
+           a = generateBase(false);
+           switch(random(0,2)){
+
+              case 2:
+              top += a+"^{"+d+"} \\cdot ";
+              tott1 += d;
+              
+              case 1:
+              bot += a+"^{"+f+"} \\cdot ";
+              totb1 += f;
+              
+              case 0:
+              top += a+"^{"+g+"}";
+              bot += a+"^{"+h+"}";
+              tott1 += g;                            
+              totb1 += h;                           
+              break;
+           }
+           
+           do{
+              
+              b = generateBase(false);
+              c = generateBase(false);
+              
+           } while(a == b || b == c || a == c);
+           
+           
+           // include other bases as well
+           var tott2 = 0;
+           var totb2 = 0;
+           var tot2 = 0;
+           var tott3 = 0;
+           var totb3 = 0;
+           var tot3 = 0
+           
+           switch(random(0,2)){
+             
+             // leave it as one base
+             case 2:
+             break;
+             
+             // add in two more bases (no break, so it does case 0 as well)
+             case 1:
+            
+             bExists = true;
+             
+             switch (random(0,2)){
+           
+                case 2:
+                top += "\\cdot "+b+"^{"+h+"}";
+                tott2 += h;
+                
+                case 1:
+                bot += "\\cdot "+b+"^{"+d+"}";
+                totb2 += d;
+              
+                case 0:              
+                top += " \\cdot "+b+"^{"+f+"}";
+                bot += " \\cdot "+b+"^{"+g+"}";
+                tott2 += f;
+                totb2 += g;
+                break;
+              
+             }
+             
+             // add in one more base
+             case 0:
+             
+             cExists = true;
+             
+             switch (random(0,2)){
+           
+                case 2:
+                top += "\\cdot "+c+"^{"+e+"}";
+                tott3 += e;
+                
+                case 1:
+                bot += "\\cdot "+c+"^{"+f+"}";
+                totb3 += f; 
+              
+                case 0:                  
+                top += "\\cdot "+c+"^{"+g+"}";
+                bot += "\\cdot "+c+"^{"+d+"}";
+                tott3 += g;
+                totb3 += d;
+                break;
+              
+             }
+           
+             break;
+             
+           }                     
+           
+           var power = random(2,5);
+           top = "("+top+")^{"+power+"}";
+           problem = "\\(\\cfrac{"+top+"}{"+bot+"}\\)";              
+           tot1 = (tott1*power)-totb1;
+           tot2 = (tott2*power)-totb2;
+           tot3 = (tott3*power)-totb3;
+
+           var aPower = a+"^{"+tot1+"}";
+           var bPower = b+"^{"+tot2+"}";
+           var cPower = c+"^{"+tot3+"}";
+           answer = aPower;
+           
+           var bases = [a];
+           var exponents = [tot1];
+           
+           if(bExists){ answer += "\\cdot "+bPower; bases.push(b); exponents.push(tot2);}
+           if(cExists){ answer += "\\cdot "+cPower; bases.push(c); exponents.push(tot3);}                    
+            
+           answer += formatAnswer(1,bases,exponents);
+           // testing 
+           //answer = "x^-1 y^-1 z^-1 a^-1"+formatAnswer(["x","y","z","a"],["x^2","y^-1","z^-1","a^-1"],[2,-1,-1,-1]);          
+           break;
+           
+           // Convert to and from Scientific Notation
+           case 5:
+           c = random(1,3);
+           a = randomDec(1.1, 9.9, c); 
+           b = non_zero_random(-8,8); 
+           
+           switch(random(0,1)){
+              
+              // convert to scientific notation
+              case 0:
+              problem = "Convert \\("+convertToStandard(a,b,c)+"\\) to scientific notation";
+              answer = a+"\\times 10^{"+b+"}";
+              break;
+              
+              // convert from scientific notation
+              case 1:
+              problem = "Convert \\("+a+"\\times 10^{"+b+"}\\) to standard form";
+              answer = ""+convertToStandard(a,b,c)+"";
+              break;
+              
+           }
+ 
+           break;
+           
+           // Sci Notation: Adding & Subtracting
+           case 6:
+           h = random(1,2);
+           a = randomDec(1.1, 9.9, h);
+           b = randomDec(1.1, 9.9, h);
+           
+           switch(random(0,1)){
+           
+               // both large
+               case 0:
+               d = random(2,5);
+               c = d+random(0,1);
+               break;
+               
+               // both small
+               case 1:
+               d = random(-5,-2);
+               c = d+random(0,1);
+               break;
+           }
+              var sum = 0; var pow = 0;
+
+              if(c > d){ sum =  Math.round((((c-d)*10*b+a)/10)*10000)/10000;  } else {sum = Math.round((a+b)*10000)/10000;}
+              pow = c;
+              if(sum >= 10){ sum = Math.round((sum/10)*10000)/10000; pow ++; }
+           
+           switch(random(0,1)){
+           
+              // adding
+              case 0:
+              problem = "\\("+a+"\\times 10^{"+d+"} + "+b+"\\times 10^{"+c+"}\\)";
+              answer= sum+"\\times 10^{"+pow+"}"; 
+              break;
+              
+              // subtracting
+              case 1:
+              problem = "\\(("+sum+"\\times 10^{"+pow+"}) - ("+a+"\\times 10^{"+d+"})\\)";
+              answer= b+"\\times 10^{"+c+"}";
+              break;
+           
+           }
+           break;
+           
+           // Sci Notation: Multiplying & Dividing
+           case 7:
+           h = random(0,1);
+           a = randomDec(1.1, 9.9, 0);
+           b = randomDec(1.1, 9.9, h);
+           
+           switch(random(0,1)){
+           
+              // multiplying
+              case 0:
+              problem = "\\(("+a+" \\times 10^{"+d+"}) \\cdot ("+b+" \\times 10^{"+e+"})\\)";
+              c = Math.round((a*b)*10000)/10000;
+              f = d+e;
+              if(c > 10){ c = Math.round((c/10)*10000)/10000; f += 1; }
+              answer = c+" \\times 10^{"+f+"}";
+              break;
+              
+              // dividing
+              case 1:
+              c = Math.round((a*b)*10000)/10000;
+              f = d+e;
+              if(c > 10){ c = Math.round((c/10)*10000)/10000; f += 1; }
+              problem = "\\(\\cfrac{"+c+" \\times 10^{"+f+"}}{"+a+" \\times 10^{"+d+"}}\\)";
+              answer = b+" \\times 10^{"+e+"}";
+              break;
+              
+           }
+           break;
+           
+       }
+            
+       $("#generated").html(problem);
+       $("#answer").html("\\("+doublesigns(answer)+"\\)");
+       renderMathInElement(document.body);
+       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"generated"]);
+       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
+	}
+	
+    // removes all double signs
+    function doublesigns(string){
+       return string.replaceAll("-+", "-").replaceAll("- +", "-").replaceAll("+ -", "-").replaceAll("- -", "+").replaceAll("+-", "-").replaceAll("-- ", "+");
+    }
+    
+    String.prototype.replaceAll = function(searchStr, replaceStr) {
+	   var str = this;
+       // no match exists in string?
+       if(str.indexOf(searchStr) === -1) {
+          // return string
+          return str;
+       }
+      // replace and remove first match, and do another recursirve search/replace
+       return (str.replace(searchStr, replaceStr)).replaceAll(searchStr, replaceStr);
+    }
+    
+    // random integer between and including min and max
+	function random(min, max) {
+         return Math.floor(Math.random() * (max - min + 1) ) + min;
+    } 
+    
+    // random non-zero integer bewteen min and max
+    function non_zero_random(min, max) {
+         var output;
+         do{output = Math.floor(Math.random() * (max - min + 1) ) + min;} while (output === 0);  
+         return output;
+    } 
+    
+    function pickVar() {
+   var result           = '';
+   var characters       = 'abcdfghjklmnpqrstuvwxyz'; //avoid e, i, o
+   var charactersLength = characters.length;
+   return characters.charAt(Math.floor(Math.random() * charactersLength));
+}
+    
+    function generateBase(negative){
+       var output = "";
+       var max = 8;
+       if(negative){max = 9;} 
+       
+       switch (random(0,max)){
+           
+            case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7: output = pickVar(); break; 
+            case 8: output = random(2,10); break;
+            case 9: output = "("+random(-10,-2)+")"; 
+           
+       }
+       
+       return output;
+    
+    }
+    
+    // helper function to simplify answer completely using only positive exponents
+    // Known limitation: when the bases and the coefficients are the same, it doesn't simplify these
+    function formatAnswer(coef,bases,exponents){
+       
+       // formatted answer string
+       var answer = "";
+       
+       // determine how many there are
+       var num = exponents.length;
+       var oneExp = false;
+       var zeroExp = false;
+       var countZeroes = 0;
+       var negExp = false;
+       
+       // new array to store the new exponential forms of each
+       var expform = [];
+       
+       // exponent of 1 reformatting
+       for(var i = 0; i < num; i++){
+           
+           expform[i] = bases[i]+"^{"+exponents[i]+"}";
+           
+           // removes the unncessary 1 exponent
+           if(exponents[i] == 1){expform[i] = bases[i]; oneExp = true;}
+           
+           // check to see if there is a zero exponent now to avoid having to go through the array again later for 0 formatting
+           if(exponents[i] === 0){ zeroExp = true; countZeroes++; }
+           
+           // check for any negatives now to avoid having to go through the array again later for negative formatting
+           if(exponents[i] < 0){ negExp = true; }
+           
+       }  
+       
+       if(oneExp){  
+          
+          var oneString = "";
+          
+          if(coef != 1){ oneString += coef; }
+          
+          oneString += expform[0];
+          
+          // if more than one, add them in
+          for(var i = 1; i < num; i++){
+             
+             oneString += " \\cdot "+expform[i];
+             
+          }
+          answer += " = "+oneString;
+       }
+           
+           // exponents of 0 reformatting
+           if(zeroExp){
+           
+             var zeroFormatting = "";
+             
+             if(coef != 1){ zeroFormatting += coef; }
+             
+             for(var i = 0; i < num; i++){
+             
+                // removes the unncessary 0 exponent and rewrites as 1
+                if(exponents[i] === 0){expform[i] = "1";}
+               
+             }
+             
+             // all exponents are 0 
+             if(countZeroes == num){ answer +="= 1";}
+             else{
+                
+                for(var i = 0; i < num; i++){
+                  
+                  // for each one that does not have a 0 exponent, append it
+                  if(exponents[i] != 0){ zeroFormatting += expform[i];}
+                  
+                }
+               
+               answer += " = "+zeroFormatting;
+              }           
+              
+           }
+           
+           // reformat if at least one exponent is negative
+           if(negExp){
+           
+             var newTop = "";
+             var newBot = "";
+             
+             // cycle through to find the negative exponent(s) and reformat
+             for(var i = 0; i < num; i++){
+                
+                if(exponents[i] < 0){
+                      
+                      var newExp = -1*exponents[i];
+                      if(newExp != 1){
+                         newBot += bases[i]+"^{"+(newExp)+"}";
+                      }
+                      else{
+                         newBot += bases[i];
+                      }
+                }
+                else{ 
+                    
+                        if(exponents[i] > 1){newTop += expform[i];} 
+                        if(exponents[i] == 1){newTop += bases[i];} 
+                    }
+             
+             }
+             
+             if(newTop == ""){ newTop = coef;}
+             else{
+                 
+                 if(coef != 1){ newTop = coef+" \\cdot "+newTop; }
+             
+             }
+             
+             answer += "= \\cfrac{"+newTop+"}{"+newBot+"}";
+             
+           }
+       
+       return answer;
+    }
+    
+    function randomDec(min, max, decimalPlaces) {  
+        var rand = Math.random()*(max-min) + min;
+        var power = Math.pow(10, decimalPlaces);
+        return Math.floor(rand*power) / power;
+    }
+    
+    function convertToStandard(a,b,decplaces){
+    
+      var output = "";
+      
+      if(b < 0){
+      
+        var num = Math.abs(b)-1;
+        output += "0.";
+        
+        for(var i = 0; i < num; i++){  output += "0"; }
+        
+        var end = Math.round(a*10**decplaces*100000)/100000;
+        output+= end;
+        
+      } else{
+      
+        output+= Math.round(a*10**b*100000)/100000;
+        
+      }
+      
+      return output;
+    
+    }
+    
+</script>
