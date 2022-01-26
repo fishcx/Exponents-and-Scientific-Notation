@@ -570,7 +570,7 @@
           // if more than one, add them in
           for(var i = 1; i < num; i++){
              
-             oneString += " \\cdot "+expform[i];
+             oneString += expform[i];
              
           }
           answer += " = "+oneString;
@@ -636,7 +636,7 @@
              if(newTop == ""){ newTop = coef;}
              else{
                  
-                 if(coef != 1){ newTop = coef+" \\cdot "+newTop; }
+                 if(coef != 1){ newTop = coef+newTop; }
              
              }
              
