@@ -443,7 +443,7 @@
            h = random(0,1);
            a = randomDec(1.1, 9.9, 0);
            b = randomDec(1.1, 9.9, h);
-           
+
            switch(random(0,1)){
            
               // multiplying
@@ -451,7 +451,7 @@
               problem = "\\(("+a+" \\times 10^{"+d+"}) \\cdot ("+b+" \\times 10^{"+e+"})\\)";
               c = Math.round((a*b)*10000)/10000;
               f = d+e;
-              if(c > 10){ c = Math.round((c/10)*10000)/10000; f += 1; }
+              if(c >= 10){ c = Math.round((c/10)*10000)/10000; f += 1; }
               answer = c+" \\times 10^{"+f+"}";
               break;
               
@@ -459,7 +459,7 @@
               case 1:
               c = Math.round((a*b)*10000)/10000;
               f = d+e;
-              if(c > 10){ c = Math.round((c/10)*10000)/10000; f += 1; }
+              if(c >= 10){ c = Math.round((c/10)*10000)/10000; f += 1; }
               problem = "\\(\\cfrac{"+c+" \\times 10^{"+f+"}}{"+a+" \\times 10^{"+d+"}}\\)";
               answer = b+" \\times 10^{"+e+"}";
               break;
