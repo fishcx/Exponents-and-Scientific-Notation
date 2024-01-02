@@ -6,7 +6,7 @@ function doGet(e) {
       .evaluate()
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
   
-  output.setTitle('Exponents and Scientific Notation');
+  output.setTitle('Exponent Rules');
   
   return output;
  

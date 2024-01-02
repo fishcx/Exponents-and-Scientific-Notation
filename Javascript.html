@@ -21,9 +21,6 @@
         
         var type;
         // handles the formatting for selecting any type
-        /** if($("#type").val()=="any"){type = random(1,7);}
-        else if($("#type").val()=="exp"){type = random(1,4);}
-        else if($("#type").val()=="sci"){type = random(5,7);} **/
         if($("#type").val()=="any"){type = random(1,4);}
         else{type = parseInt($("#type").val())}
 
@@ -48,10 +45,7 @@
        var videoLinks = ["https://www.youtube.com/watch?v=k-wTtHsnKq0",
                          "https://www.youtube.com/watch?v=Li6pv0gs1gM",
                          "https://www.youtube.com/watch?v=ZvULOKQJFfE",
-                         "https://www.youtube.com/watch?v=Nk3w7gfc2Q8",
-                         "https://www.youtube.com/watch?v=aVSRRroRAK8",
-                         "https://www.youtube.com/watch?v=4Ud_jB1b9JE",
-                         "https://www.youtube.com/watch?v=GgF40PwoSWE"];
+                         "https://www.youtube.com/watch?v=Nk3w7gfc2Q8"];
        
        if(videoLinks[type-1].length != 0){ 
          $("#videoLink"). attr("href", videoLinks[type-1]);
@@ -372,109 +366,11 @@
            //answer = "x^-1 y^-1 z^-1 a^-1"+formatAnswer(["x","y","z","a"],["x^2","y^-1","z^-1","a^-1"],[2,-1,-1,-1]);          
            break;
            
-           // Convert to and from Scientific Notation
-           case 5:
-           c = random(1,3);
-           a = randomDec(1.1, 9.9, c); 
-           b = non_zero_random(-8,8); 
-           
-           switch(random(0,1)){
-              
-              // convert to scientific notation
-              case 0:
-              problem = "Convert \\("+convertToStandard(a,b,c)+"\\) to scientific notation";
-              answer = a+"\\times 10^{"+b+"}";
-              break;
-              
-              // convert from scientific notation
-              case 1:
-              problem = "Convert \\("+a+"\\times 10^{"+b+"}\\) to standard form";
-              answer = ""+convertToStandard(a,b,c)+"";
-              break;
-              
-           }
- 
-           break;
-           
-           // Sci Notation: Adding & Subtracting
-           case 6:
-           h = random(1,2);
-           a = randomDec(1.1, 9.9, h);
-           b = randomDec(1.1, 9.9, h);
-           
-           switch(random(0,1)){
-           
-               // both large
-               case 0:
-               d = random(2,5);
-               c = d+random(0,1);
-               break;
-               
-               // both small
-               case 1:
-               d = random(-5,-2);
-               c = d+random(0,1);
-               break;
-           }
-              var sum = 0; var pow = 0;
-
-              if(c > d){ sum =  Math.round((((c-d)*10*b+a)/10)*10000)/10000;  } else {sum = Math.round((a+b)*10000)/10000;}
-              pow = c;
-              if(sum >= 10){ sum = Math.round((sum/10)*10000)/10000; pow ++; }
-           
-           switch(random(0,1)){
-           
-              // adding
-              case 0:
-              problem = "\\("+a+"\\times 10^{"+d+"} + "+b+"\\times 10^{"+c+"}\\)";
-              answer= sum+"\\times 10^{"+pow+"}"; 
-              break;
-              
-              // subtracting
-              case 1:
-              problem = "\\(("+sum+"\\times 10^{"+pow+"}) - ("+a+"\\times 10^{"+d+"})\\)";
-              answer= b+"\\times 10^{"+c+"}";
-              break;
-           
-           }
-           break;
-           
-           // Sci Notation: Multiplying & Dividing
-           case 7:
-           h = random(0,1);
-           a = randomDec(1.1, 9.9, 0);
-           b = randomDec(1.1, 9.9, h);
-
-           switch(random(0,1)){
-           
-              // multiplying
-              case 0:
-              problem = "\\(("+a+" \\times 10^{"+d+"}) \\cdot ("+b+" \\times 10^{"+e+"})\\)";
-              c = Math.round((a*b)*10000)/10000;
-              f = d+e;
-              if(c >= 10){ c = Math.round((c/10)*10000)/10000; f += 1; }
-              answer = c+" \\times 10^{"+f+"}";
-              break;
-              
-              // dividing
-              case 1:
-              c = Math.round((a*b)*10000)/10000;
-              f = d+e;
-              if(c >= 10){ c = Math.round((c/10)*10000)/10000; f += 1; }
-              problem = "\\(\\cfrac{"+c+" \\times 10^{"+f+"}}{"+a+" \\times 10^{"+d+"}}\\)";
-              answer = b+" \\times 10^{"+e+"}";
-              break;
-              
-           }
-           break;
-           
        }
             
        $("#generated").html(problem);
        $("#answer").html("\\("+doublesigns(answer)+"\\)");
        renderMathInElement(document.body);
-       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"generated"]);
-       //MathJax.Hub.queue.Push(["Typeset",MathJax.Hub,"answer"]);
 	}
 	
     // removes all double signs
