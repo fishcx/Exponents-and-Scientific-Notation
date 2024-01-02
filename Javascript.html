@@ -21,9 +21,10 @@
         
         var type;
         // handles the formatting for selecting any type
-        if($("#type").val()=="any"){type = random(1,7);}
+        /** if($("#type").val()=="any"){type = random(1,7);}
         else if($("#type").val()=="exp"){type = random(1,4);}
-        else if($("#type").val()=="sci"){type = random(5,7);}
+        else if($("#type").val()=="sci"){type = random(5,7);} **/
+        if($("#type").val()=="any"){type = random(1,4);}
         else{type = parseInt($("#type").val())}
 
         if(!testing){$("#answer").hide(); $("#show-answer").val("Show Answer");}
