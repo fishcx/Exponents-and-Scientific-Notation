@@ -46,6 +46,7 @@
                          "https://www.youtube.com/watch?v=Li6pv0gs1gM",
                          "https://www.youtube.com/watch?v=ZvULOKQJFfE",
                          "https://www.youtube.com/watch?v=Nk3w7gfc2Q8",
+                         "https://www.youtube.com/watch?v=HLtm7t5QHWk",
                          "https://www.youtube.com/watch?v=HLtm7t5QHWk"];
        
        if(videoLinks[type-1].length != 0){ 
@@ -401,6 +402,27 @@
                break;
                
            }
+
+           break;
+
+           // changing bases level 2
+           case 6:
+           var base = random(2,9);
+           var varExp = pickVarCommon();
+          var problem = "Rewrite into \\(b^"+varExp+"\\) form:";
+           switch (random(0,0)){
+
+              case 0:
+               var power = random(2,5);
+               var bsqr = Math.pow(base,power);
+               var power2 = random(2,5); 
+               var power3 = random(2,5); 
+               var prod = power2*power3;
+               problem += "\\( \\cfrac{"+bsqr+"^{"+varExp+"}}{("+base+"^{"+power2+"})^{"+power3+"}} \\)";
+               answer = "\\cfrac{"+bsqr+"^{"+varExp+"}}{("+base+"^{"+power2+"})^{"+power3+"}} = \\cfrac{("+base+"^{"+power+"})^{"+varExp+"}}{"+base+"^{"+prod+"}} = "+base+"^{"+power+""+varExp+"-"+prod+"}";
+               break;
+
+             }
 
            break;
            
