@@ -88,8 +88,13 @@
        switch(type) {
            // Multiplying Level 1
            case 1: 
+           e = Math.abs(e);
+           f = Math.abs(f);
+           g = Math.abs(g);
+           h = Math.abs(h);  
+
            switch(random(0,2)){
-              
+                      
               case 2:
               problem += a+"^{"+e+"} \\cdot ";
               tot += e;
@@ -231,7 +236,10 @@
            var ans2 = "";
            var bases = [];
            var exponents = [];
-
+           h = Math.abs(h);
+           d = Math.abs(d);
+           g = Math.abs(g);
+           h = Math.abs(h);
            switch(random(0,1)){
                            
               case 1:
