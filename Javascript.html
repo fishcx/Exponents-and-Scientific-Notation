@@ -21,7 +21,7 @@
         
         var type;
         // handles the formatting for selecting any type
-        if($("#type").val()=="any"){type = random(1,7);}
+        if($("#type").val()=="any"){type = random(1,6);}
         else{type = parseInt($("#type").val())}
 
         if(!testing){$("#answer").hide(); $("#show-answer").val("Show Answer");}
@@ -119,28 +119,30 @@
 
            // Multiplying Level 2
            case 2: 
-           switch(random(3,6)){
+           switch(random(0,2)){
               
-              case 6:
+              case 0:
               problem = "\\("+a+"^{"+d+"}"+b+"^{"+f+"} \\cdot "+a+"^{"+g+"}"+b+"^{"+i+"}\\)";
               answer = a+"^{"+(d+g)+"} \\cdot "+b+"^{"+(f+i)+"}";    
               answer += formatAnswer(1,[a,b],[(d+g),(f+i)]);         
               break;
               
-              case 5:
+              case 1:
               a = random(2,6); b = random(2,6);
               problem = "\\("+a+var1+"^{"+d+"}"+var2+"^{"+e+"} \\cdot "+b+var1+"^{"+g+"}"+var2+"^{"+h+"}\\)";
               answer = (a*b)+var1+"^{"+(d+g)+"} \\cdot "+var2+"^{"+(e+h)+"}";     
               answer += formatAnswer((a*b),[var1,var2],[(d+g),(e+h)]);         
               break;
    
-              case 4:
+              case 2:
               a = random(2,6); b = random(2,6);
               problem = "\\("+a+var1+"^{"+d+"}"+var2+"^{"+e+"}"+var3+"^{"+f+"} \\cdot "+b+var1+"^{"+g+"}"+var2+"^{"+h+"}"+var3+"^{"+i+"}\\)";
               answer = (a*b)+var1+"^{"+(d+g)+"} \\cdot "+var2+"^{"+(e+h)+"} \\cdot "+var3+"^{"+(f+i)+"}";     
               answer += formatAnswer((a*b),[var1,var2,var3],[(d+g),(e+h),(f+i)]);         
               break;
               
+              // too many items
+              /*
               case 3:
               problem += a+"^{"+d+"} \\cdot ";
               tot += d;
@@ -159,6 +161,7 @@
               problem = "\\("+problem+"\\)";
               
               break;
+              */
            
            }
 
